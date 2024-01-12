@@ -1,0 +1,493 @@
+#include<iostream>
+#include<iomanip>
+using namespace std;
+
+// Node structure for a linked list
+struct node {
+    int data;
+    node* link;
+};
+
+// Function to make a new head node
+void insert_beginning(node* &head, int x) {
+    node* newNode = new node;
+    newNode->data = x;
+    newNode->link = head->link;
+    head = newNode;
+}
+// Function to get the linked lists size// Function to make a new head node
+int size_determine(node* head) {
+    int size = 1;
+    node* temp = head;
+    while (temp->link != NULL) {
+        size++;
+        temp = temp->link;
+    }
+    return size;
+}
+
+// Function to insert a node at a specified position in the linked list
+bool insert_at(node* head, int pos, int size) {
+    int x;
+
+    if (pos == 0 or pos > size + 1) {
+        cout << "This position doesn't exist in the list.\n\n";
+        return false;
+    }
+
+    cout << "Enter the number: ";
+    cin >> x;
+    node* temp = head;
+    node* newNode = new node;
+    newNode->data = x;
+    newNode->link = NULL;
+
+    if (pos == 1) {
+        newNode->link = temp->link;
+        head = newNode;
+        return true;
+    }
+
+    pos--;
+    while (pos != 1) {
+        temp = temp->link;
+        pos--;
+    }
+    newNode->link = temp->link;
+    temp->link = newNode;
+
+    return true;
+}
+
+// Function to insert a node at the end of the linked list
+void insert_end(node* head, int x) {
+    node* newNode = new node;
+    newNode->data = x;
+    if (head->link == NULL) {
+        newNode->link = NULL;
+        head->link = newNode;
+    } else {
+        while (head->link != NULL) {
+            head = head->link;
+        }
+        head->link = newNode;
+        newNode->link = NULL;
+    }
+}
+
+// Function to delete the last node in the linked list
+void del_end(node* &head) {
+    if (head == NULL) {
+        return;
+    }
+    if (head->link == NULL) {
+        delete head;
+    }
+    node* sec_last = head;
+    while (sec_last->link->link != NULL) {
+        sec_last = sec_last->link;
+    }
+    delete(sec_last->link);
+    sec_last->link = NULL;
+}
+
+// Function to delete the first node in the linked list
+void del_head(node* &head) {
+    if (head == NULL)
+        return;
+
+    head = head->link;
+}
+
+// Function to delete a node at a specified position in the linked list
+void del_at(node*& head, int pos) {
+    node* prev = head;
+    node* curr = head;
+    if (head == NULL) {
+        cout << "List is already empty";
+        return;
+    }
+
+    if (pos == 1) {
+        head = curr->link;
+        curr->link = NULL;
+        curr = NULL;
+    }
+
+    node* temp = head;
+    for (int i = 1; i < pos - 1; ++i) {
+        if (temp->link != NULL)
+            temp = temp->link;
+    }
+    if (temp->link == NULL) {
+        cout << "Invalid position for deletion." << endl;
+    }
+
+    node* val = temp->link;
+    temp->link = val->link;
+    delete (val);
+}
+
+// Function to delete the node with the specific data value in the linked list
+void del_data(node*& head, int val) {
+    if (head == NULL)
+        return;
+    if (head->data == val) {
+        node* temp = head;
+        head = head->link;
+        delete temp;
+        return;
+    }
+    node* num = head;
+    while (num->link != NULL && num->link->data != val) {
+        num = num->link;
+    }
+    if (num->link == NULL) {
+        cout << "Value not found in the list." << endl;
+        return;
+    }
+    node* temp = num->link;
+    num->link = temp->link;
+    delete temp;
+}
+
+// Function to search for the user specified data value in the linked list
+node* search(node* head, int find) {
+    int count = 1;
+    if (head == NULL) {
+        return NULL;
+    }
+    if (head->data == find) {
+        cout << "The number " << find << " is found at position #0" << count << " of the list.\n\n";
+        return head;
+    }
+    while (head->data != find && head->link != NULL) {
+        count++;
+
+        head = head->link;
+    }
+
+    if (head->data != find and head->link == NULL) {
+        cout << "The number " << find << " is not found in the list.\n\n";
+        return head;
+    }
+
+    cout << "The number " << find << " is found at position #0" << count << " of the list.\n\n";
+
+    return head;
+}
+
+// Function to search for the value user needs to update in update_nodeNum function
+node* search_update(node* head, int find) {
+    int count = 1;
+    if (head == NULL) {
+        return NULL;
+    }
+    if (head->data == find) {
+        return head;
+    }
+    while (head->data != find && head->link != NULL) {
+        count++;
+        head = head->link;
+    }
+
+    if (head->data != find and head->link == NULL) {
+        cout << "The number " << find << " is not found in the list.\n\n";
+        return head;
+    }
+    return head;
+}
+
+// Function to sort the linked list in ascending order
+void sort(node* head) {
+    if (head->link == NULL || head == NULL) {
+        return;
+    }
+
+    node* nextNode = NULL;
+    while (head->link != NULL) {
+        nextNode = head->link;
+        while (nextNode != NULL) {
+            if (head->data > nextNode->data) {
+                int temp = head->data;
+                head->data = nextNode->data;
+                nextNode->data = temp;
+            }
+            nextNode = nextNode->link;
+        }
+        head = head->link;
+    }
+}
+
+// Function to reverse the linked list
+void reverse(node*& head) { // & used as calls the list by ref
+    node *prev = NULL, *next = NULL;
+
+    while (head != NULL) {
+        next = head->link;
+        head->link = prev; // changes the direction of pointer/node
+        prev = head;
+        head = next;
+    }
+    head = prev; // set the now first value as head
+}
+
+// Function to traverse and print the linked list
+void traverse(node* head) {
+    while (head->link != NULL) {
+        cout << "|" << head->data << "|" << "  ";
+        head = head->link;
+    }
+    cout << "|" << head->data << "|" << "  ";
+    return;
+}
+
+//Function to change a user specified date within a node
+bool update_nodeNum(node* head, int Find) {
+    int n;
+    cout << "Enter the number: ";
+    cin >> n;
+    node* temp = search_update(head, Find);
+    head = temp;
+    head->data = n;
+
+    return true;
+}
+// Function to swap the values between 2 nodes
+bool swap(node* head, int pos1, int pos2) {
+    node* temp1 = head;
+    node* temp2 = head;
+    if (pos1 == pos2) {
+        cout << "\n Both positions can't be the same \n";
+        return false;
+    }
+    if (pos1 == 1) {
+        temp1 = head;
+    } else {
+        for (int i = 1; i < pos1; ++i) {
+            if (temp1->link != NULL) {
+                temp1 = temp1->link;
+            }
+        }
+    }
+    if (pos2 == 1) {
+        temp2 = head;
+    } else {
+        for (int i = 1; i < pos2; ++i) {
+            if (temp2->link != NULL) {
+                temp2 = temp2->link;
+            }
+        }
+    }
+    int temp;
+    temp = temp1->data;
+    temp1->data = temp2->data;
+    temp2->data = temp;
+    return true;
+}
+int main() {
+
+    node* head = new node; /*inintializing node*/
+    head->link = NULL;
+
+    int n, e, m, pos,num;
+    string str;
+    char st;
+    int press; /*initializing further variables*/
+    bool fin = false, kon = false;
+    cout << setw(85) << right << "---------------------------------------------------------\n";
+    cout << setw(85) << right << "\"Welcome respected user to the list management system!!!\"\n";
+    cout << setw(86) << right << "---------------------------------------------------------\n\n";
+    do {
+        cout << "Press \"c\" to continue or \"u\" to understand what a linked list is\"\n\n";
+        char opt;
+        cin >> opt;
+
+        switch (opt) {
+            case 'c': {
+                cout << "how many nodes you would like in your list: ";
+                cin >> n;
+                kon = true;
+            }
+                break;
+            case 'u': {
+                cout << "\n\nA linked list is a linear data structure, in which the elements are not stored at contiguous\n";
+                cout << "memory locations.The elements in a linked list are linked using pointers.\n";
+                cout << "In simple words, a linked list consists of nodes where each node contains a data field \n";
+                cout << "and a reference(link) to the next node in the list.\n\n";
+
+                cout << "how many nodes you would like in your list: ";
+                cin >> n;
+                kon = true;
+            }
+                break;
+
+            default: {
+                cout << "\"Please enter valid query!!!\"\n\n";
+            }
+                break;
+        }
+    } while (kon != true);
+
+    for (int i = 1; i <= n; i++) {
+        if (i == 1) {
+            cout << "enter number #01: ";
+            cin >> e;
+            insert_beginning(head, e);
+        } else {
+            cout << "enter number #0" << i << ": ";
+            cin >> e;
+            insert_end(head, e);
+        }
+    }
+    do {
+        cout << endl;
+        cout << setw(85) << right << "--------------------------------------------------------" << endl;
+        cout << setw(79) << right << "|     PRESS ON ANY OF THE BELOW OPTIONS TO PROCEED " << setw(7) << right << "|" << endl;
+        cout << setw(86) << right << "|--------------------------------------------------------|" << endl;
+        cout << setw(29) << "|" << "1. Print Your List" << setw(39) << right << "|" << endl;
+        cout << setw(29) << "|" << "2. Insert A Number in The List" << setw(27) << right << "|" << endl;
+        cout << setw(29) << "|" << "3. Update a Node" << setw(41) << right << "|" << endl;
+        cout << setw(29) << "|" << "4. Delete the Head Node" << setw(34) << right << "|" << endl;
+        cout << setw(29) << "|" << "5. Delete A Particular Node" << setw(30) << right << "|" << endl;
+        cout << setw(29) << "|" << "6. Search A Number In The List" << setw(27) << right << "|" << endl;
+        cout << setw(29) << "|" << "7. Reverse The List" << setw(38) << right << "|" << endl;
+        cout << setw(29) << "|" << "8. Sort The List" << setw(41) << right << "|" << endl;
+        cout << setw(29) << "|" << "9. Check The Size Of The List" << setw(28) << right << "|" << endl;
+        cout << setw(29) << "|" << "10. Swap Nodes" << setw(43) << right << "|" << endl;
+        cout << setw(29) << "|" << "11. Exit The Program" << setw(37) << right << "|" << endl;
+        cout << setw(85) << right << "--------------------------------------------------------" << endl;
+
+        cout << "Please enter your choice here: ";
+        cin >> press;
+
+        switch (press) {
+
+            case 1: {
+            	cout << "\nYour list is:\n\n";
+                traverse(head);
+                break;
+            }
+
+            case 2: {
+                cout << "\n\nPlease tell at which position you want to add your number: ";
+                cin >> pos;
+
+                if (pos > n or pos <= 0) {
+                    cout << "\nThis position doesn't exist in the list.\n\n";
+                    break;
+                }
+
+                if (insert_at(head, pos, size_determine(head))) {
+                    cout << "Your updated list is: ";
+                    traverse(head);
+                }
+                break;
+            }
+
+            case 3: {
+                int num;
+                cout << "\n\nPlease tell which number you need to update: ";
+                cin >> num;
+
+                if (update_nodeNum(head, num)) {
+                    cout << "Your updated list is: ";
+                    traverse(head);
+                }
+
+                break;
+            }
+//            case 4: {
+//            	
+//				break;
+//			}
+				case 5: {
+					cout << "Do you want to enter the number (num) or the position (pos) of the node in the list? ";
+					cin >> str;
+
+					if (str == "pos"){
+						cout<<"Enter the position: ";					
+						cin >> pos;
+						del_at(head, pos);
+					}
+						else if(str == "num"){							
+							cout<<"Enter the number: ";
+							cin >> num;
+							del_data(head,num);
+						}
+
+
+					cout << "The updated list is: \n";
+					traverse(head);
+
+					break;
+				}
+
+				case 6: {
+					cout << "Enter which number to find: ";
+					cin >> m;
+					search(head, m);
+
+					break;
+				}
+
+				case 7: {
+					cout << "The original list was: ";
+					traverse(head);
+
+					reverse(head);
+					cout << "\nThe list reversed is: \n";
+					traverse(head);
+
+					break;
+				}
+
+				case 8: {
+					cout << "The original list was: ";
+					traverse(head);
+
+					sort(head);
+					cout << "\nThe sorted list is: \n";
+					traverse(head);
+
+					break;
+				}
+
+				case 9: {
+					cout << "\nThe size of your list is: " << size_determine(head) << " nodes.\n\n";
+					break;
+				}
+
+				case 10: {
+					int pos1, pos2;
+					cout << "\n\"Swap means to interchange values of a node from another\"\n\n";
+					cout << "\n Enter from which position you need to swap: ";
+					cin >> pos1;
+					cout << "\n Enter the position you need to swap (to): ";
+					cin >> pos2;
+
+					if (swap(head, pos1, pos2)) {
+						cout << "Your updated list is: ";
+						traverse(head);
+					}
+					break;
+				}
+
+				default: {
+					bool opt = true;
+					if (press == 11 and opt != false) {
+						cout << "\nBye, Have a Good Day!!!\n";
+						fin = true;
+						break;
+					} else if (press > 11 or press <= 11 and opt != false) {
+						cout << "Invalid option\n";
+						cout << "\nPLease enter your choice here: ";
+						cin >> press;
+						break;
+					}
+					break;
+				}
+			}
+		} while (press != 11 and fin != true);
+	}
+            
