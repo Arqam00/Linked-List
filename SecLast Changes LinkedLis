@@ -8,14 +8,14 @@ struct node {
     node* link;
 };
 
-// Function to make a new head node
+// Function to insert a node at the beginning of the linked list
 void insert_beginning(node* &head, int x) {
     node* newNode = new node;
     newNode->data = x;
     newNode->link = head->link;
     head = newNode;
 }
-// Function to get the linked lists size// Function to make a new head node
+
 int size_determine(node* head) {
     int size = 1;
     node* temp = head;
@@ -27,7 +27,7 @@ int size_determine(node* head) {
 }
 
 // Function to insert a node at a specified position in the linked list
-bool insert_at(node* head, int pos, int size) {
+bool insert_at(node* &head, int pos, int size) {
     int x;
 
     if (pos == 0 or pos > size + 1) {
@@ -43,8 +43,8 @@ bool insert_at(node* head, int pos, int size) {
     newNode->link = NULL;
 
     if (pos == 1) {
-        newNode->link = temp->link;
-        head = newNode;
+        newNode->link = temp;
+        head= newNode;
         return true;
     }
 
@@ -93,10 +93,12 @@ void del_end(node* &head) {
 
 // Function to delete the first node in the linked list
 void del_head(node* &head) {
-    if (head == NULL)
+    if (head == NULL){
         return;
-
-    head = head->link;
+	}
+	node* temp = head;
+	head= head->link;
+	delete temp;
 }
 
 // Function to delete a node at a specified position in the linked list
@@ -128,7 +130,7 @@ void del_at(node*& head, int pos) {
     delete (val);
 }
 
-// Function to delete the node with the specific data value in the linked list
+// Function to delete a node with a specific data value in the linked list
 void del_data(node*& head, int val) {
     if (head == NULL)
         return;
@@ -151,7 +153,7 @@ void del_data(node*& head, int val) {
     delete temp;
 }
 
-// Function to search for the user specified data value in the linked list
+// Function to search for a node with a specific data value in the linked list
 node* search(node* head, int find) {
     int count = 1;
     if (head == NULL) {
@@ -234,6 +236,7 @@ void reverse(node*& head) { // & used as calls the list by ref
 
 // Function to traverse and print the linked list
 void traverse(node* head) {
+    cout << "\n\n";
     while (head->link != NULL) {
         cout << "|" << head->data << "|" << "  ";
         head = head->link;
@@ -242,7 +245,6 @@ void traverse(node* head) {
     return;
 }
 
-//Function to change a user specified date within a node
 bool update_nodeNum(node* head, int Find) {
     int n;
     cout << "Enter the number: ";
@@ -253,7 +255,7 @@ bool update_nodeNum(node* head, int Find) {
 
     return true;
 }
-// Function to swap the values between 2 nodes
+
 bool swap(node* head, int pos1, int pos2) {
     node* temp1 = head;
     node* temp2 = head;
@@ -292,15 +294,14 @@ int main() {
 
     int n, e, m, pos,num;
     string str;
-    char st;
+    char opt;
     int press; /*initializing further variables*/
     bool fin = false, kon = false;
     cout << setw(85) << right << "---------------------------------------------------------\n";
     cout << setw(85) << right << "\"Welcome respected user to the list management system!!!\"\n";
     cout << setw(86) << right << "---------------------------------------------------------\n\n";
     do {
-        cout << "Press \"c\" to continue or \"u\" to understand what a linked list is\"\n\n";
-        char opt;
+        cout << "Press \"c\" to continue or \"u\" to understand what a linked list is\": ";
         cin >> opt;
 
         switch (opt) {
@@ -311,11 +312,10 @@ int main() {
             }
                 break;
             case 'u': {
-                cout << "\n\nA linked list is a linear data structure, in which the elements are not stored at contiguous\n";
-                cout << "memory locations.The elements in a linked list are linked using pointers.\n";
-                cout << "In simple words, a linked list consists of nodes where each node contains a data field \n";
-                cout << "and a reference(link) to the next node in the list.\n\n";
-
+    cout << setw(86) << right << "-------------------------------------------------------------\n";
+    cout << setw(83) << right << " a linked list is a linear collection of data elements \n";
+    cout << setw(87) << right << " whose order isn't given by their physical placement in memory \n";
+    cout << setw(86) << right << "-------------------------------------------------------------\n";
                 cout << "how many nodes you would like in your list: ";
                 cin >> n;
                 kon = true;
@@ -364,12 +364,14 @@ int main() {
         switch (press) {
 
             case 1: {
-            	cout << "\nYour list is:\n\n";
+            	cout<<"Your list is: \n\n";
                 traverse(head);
                 break;
             }
 
             case 2: {
+            	cout<<"Your list is: \n\n";
+                traverse(head);
                 cout << "\n\nPlease tell at which position you want to add your number: ";
                 cin >> pos;
 
@@ -386,6 +388,8 @@ int main() {
             }
 
             case 3: {
+            	traverse(head);
+            	
                 int num;
                 cout << "\n\nPlease tell which number you need to update: ";
                 cin >> num;
@@ -394,13 +398,63 @@ int main() {
                     cout << "Your updated list is: ";
                     traverse(head);
                 }
-
                 break;
             }
-//            case 4: {
-//            	
-//				break;
-//			}
+            case 4: {
+            	cout<<"\n\nDo you really want to delete the head(1st node) of your list(Y,N): ";
+            	cin >> opt;
+            		if(opt == 'n' or opt == 'N')
+            		break;
+            		
+            	switch(opt) {
+            		case 'y':
+					case 'Y': {	
+					if(head->link == NULL){
+						cout<<"\n\nList is now empty...\n\nYou can or should initialilze the list again.\n";
+						cout<<"Do you need to continue(c) or end(e) the program?: ";
+						cin >> opt;
+						switch(opt) {
+							case 'c':
+							case 'C': {
+						            cout << "how many nodes you would like in your list: ";
+                					cin >> n;
+									    for (int i = 1; i <= n; i++) {
+									        if (i == 1) {
+									            cout << "enter number #01: ";
+									            cin >> e;
+									            insert_beginning(head, e);
+									        } else {
+									            cout << "enter number #0" << i << ": ";
+									            cin >> e;
+									            insert_end(head, e);
+									        }
+									    }                					
+								break;
+							}
+							case 'e':
+							case 'E': {
+								cout << "\nBye, Have a Good Day!!!\n";
+								return 0;
+								break;
+							}	
+						}
+					}else{						
+            			cout << "deleting head...\n";
+            			del_head(head);
+            			cout << "Your updated list is: ";
+            			traverse(head);
+						break;
+					}			
+					}
+					default: {
+						cout << "Enter a valid option.\n\n";
+//            			cout<<"\n\nDo you really want to delete the head(1st node) of your list(Y,N): ";
+//            			cin >> opt;					
+						break;
+					}
+				}
+				break;
+			}
 				case 5: {
 					cout << "Do you want to enter the number (num) or the position (pos) of the node in the list? ";
 					cin >> str;
@@ -474,16 +528,13 @@ int main() {
 				}
 
 				default: {
-					bool opt = true;
+					opt = true;
 					if (press == 11 and opt != false) {
 						cout << "\nBye, Have a Good Day!!!\n";
 						fin = true;
 						break;
 					} else if (press > 11 or press <= 11 and opt != false) {
 						cout << "Invalid option\n";
-						cout << "\nPLease enter your choice here: ";
-						cin >> press;
-						break;
 					}
 					break;
 				}
