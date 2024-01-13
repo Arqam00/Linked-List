@@ -8,14 +8,14 @@ struct node {
     node* link;
 };
 
-// Function to insert a node at the beginning of the linked list
+// Function to make a new head node
 void insert_beginning(node* &head, int x) {
     node* newNode = new node;
     newNode->data = x;
     newNode->link = head->link;
     head = newNode;
 }
-
+// Function to get the linked lists size
 int size_determine(node* head) {
     int size = 1;
     node* temp = head;
@@ -101,7 +101,7 @@ void del_head(node* &head) {
 	delete temp;
 }
 
-// Function to delete a node at a specified position in the linked list
+// Function to delete a node at a user specified position in the linked list
 void del_at(node*& head, int pos) {
     node* prev = head;
     node* curr = head;
@@ -114,6 +114,7 @@ void del_at(node*& head, int pos) {
         head = curr->link;
         curr->link = NULL;
         curr = NULL;
+        return;
     }
 
     node* temp = head;
@@ -130,7 +131,7 @@ void del_at(node*& head, int pos) {
     delete (val);
 }
 
-// Function to delete a node with a specific data value in the linked list
+// Function to delete a node with the user specificied data value in the linked list
 void del_data(node*& head, int val) {
     if (head == NULL)
         return;
@@ -153,14 +154,14 @@ void del_data(node*& head, int val) {
     delete temp;
 }
 
-// Function to search for a node with a specific data value in the linked list
+// Function to search for a node with a user specificied data value in the linked list
 node* search(node* head, int find) {
     int count = 1;
     if (head == NULL) {
         return NULL;
     }
     if (head->data == find) {
-        cout << "The number " << find << " is found at position #0" << count << " of the list.\n\n";
+        cout << "The number " << find << " is found at position #" << count << " of the list.\n\n";
         return head;
     }
     while (head->data != find && head->link != NULL) {
@@ -174,7 +175,7 @@ node* search(node* head, int find) {
         return head;
     }
 
-    cout << "The number " << find << " is found at position #0" << count << " of the list.\n\n";
+    cout << "The number " << find << " is found at position #" << count << " of the list.\n\n";
 
     return head;
 }
@@ -244,7 +245,7 @@ void traverse(node* head) {
     cout << "|" << head->data << "|" << "  ";
     return;
 }
-
+//Function to change a user specified date within a node
 bool update_nodeNum(node* head, int Find) {
     int n;
     cout << "Enter the number: ";
@@ -255,7 +256,7 @@ bool update_nodeNum(node* head, int Find) {
 
     return true;
 }
-
+// Function to swap the values between 2 nodes chosen by user
 bool swap(node* head, int pos1, int pos2) {
     node* temp1 = head;
     node* temp2 = head;
@@ -331,11 +332,11 @@ int main() {
 
     for (int i = 1; i <= n; i++) {
         if (i == 1) {
-            cout << "enter number #01: ";
+            cout << "enter number #1: ";
             cin >> e;
             insert_beginning(head, e);
         } else {
-            cout << "enter number #0" << i << ": ";
+            cout << "enter number #" << i << ": ";
             cin >> e;
             insert_end(head, e);
         }
@@ -363,13 +364,13 @@ int main() {
 
         switch (press) {
 
-            case 1: {
+            case 1: { //To print list
             	cout<<"Your list is: \n\n";
                 traverse(head);
                 break;
             }
 
-            case 2: {
+            case 2: { // Insert a number into list
             	cout<<"Your list is: \n\n";
                 traverse(head);
                 cout << "\n\nPlease tell at which position you want to add your number: ";
@@ -387,7 +388,7 @@ int main() {
                 break;
             }
 
-            case 3: {
+            case 3: {// Update node
             	traverse(head);
             	
                 int num;
@@ -400,7 +401,7 @@ int main() {
                 }
                 break;
             }
-            case 4: {
+            case 4: { // delete head of list
             	cout<<"\n\nDo you really want to delete the head(1st node) of your list(Y,N): ";
             	cin >> opt;
             		if(opt == 'n' or opt == 'N')
@@ -447,16 +448,14 @@ int main() {
 					}			
 					}
 					default: {
-						cout << "Enter a valid option.\n\n";
-//            			cout<<"\n\nDo you really want to delete the head(1st node) of your list(Y,N): ";
-//            			cin >> opt;					
+						cout << "Enter a valid option.\n\n";				
 						break;
 					}
 				}
 				break;
 			}
-				case 5: {
-					cout << "Do you want to enter the number (num) or the position (pos) of the node in the list? ";
+				case 5: {// delete specific data or a specific node
+					cout << "Do you want to enter the number (num) or the position (pos) of the node in the list?\n";
 					cin >> str;
 
 					if (str == "pos"){
@@ -477,7 +476,7 @@ int main() {
 					break;
 				}
 
-				case 6: {
+				case 6: {// search for the user entered number
 					cout << "Enter which number to find: ";
 					cin >> m;
 					search(head, m);
@@ -485,7 +484,7 @@ int main() {
 					break;
 				}
 
-				case 7: {
+				case 7: {// reverse the list
 					cout << "The original list was: ";
 					traverse(head);
 
@@ -496,7 +495,7 @@ int main() {
 					break;
 				}
 
-				case 8: {
+				case 8: {// sort the list
 					cout << "The original list was: ";
 					traverse(head);
 
@@ -507,12 +506,12 @@ int main() {
 					break;
 				}
 
-				case 9: {
+				case 9: {// get the size of list
 					cout << "\nThe size of your list is: " << size_determine(head) << " nodes.\n\n";
 					break;
 				}
 
-				case 10: {
+				case 10: {// swap the value of nodes
 					int pos1, pos2;
 					cout << "\n\"Swap means to interchange values of a node from another\"\n\n";
 					cout << "\n Enter from which position you need to swap: ";
