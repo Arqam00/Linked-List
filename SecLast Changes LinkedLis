@@ -114,6 +114,7 @@ void del_at(node*& head, int pos) {
         head = curr->link;
         curr->link = NULL;
         curr = NULL;
+	delete (curr);
         return;
     }
 
